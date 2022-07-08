@@ -1,5 +1,7 @@
 import {defineType, defineField} from 'sanity'
 
+import isNotAdmin from './utils/isNotAdmin'
+
 export const departmentMember = defineType({
   name: 'departmentMember',
   type: 'document',
@@ -16,15 +18,11 @@ export const departmentMember = defineType({
       title: 'Last Name',
     }),
     defineField({
-      name: 'academicRank',
+      name: 'role',
       type: 'string',
-      title: 'Academic Rank',
-      options: {
-        list: ['Professor Emeritus', 'Professor', 'Associate Professor', 'Assistant Professor'],
-      },
-      readOnly: ({currentUser}) => {
-        return !currentUser.roles.find((role) => role.name === 'administrator')
-      },
+      title: 'Role',
+      options: ['Faculty', 'Staff', 'Graduate Student'],
+      readOnly: isNotAdmin,
     }),
     defineField({
       name: 'photo',
@@ -67,9 +65,6 @@ export const departmentMember = defineType({
       name: 'acceptingStudents',
       type: 'boolean',
       title: 'Accepting Students',
-      // options: {
-      //   layout: 'checkbox',
-      // },
     }),
   ],
 })
